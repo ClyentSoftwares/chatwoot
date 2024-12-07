@@ -4,6 +4,13 @@ class Api::V1::ProfilesController < Api::BaseController
   def show; end
 
   def update
+    if profile_params[:email].present? &&
+      profile_params[:email] != @user.email &&
+      @user.provider == 'openid_connect'
+      render_could_not_create_error('Email is managed by your SSO provider')
+      return
+    end
+
     if password_params[:password].present?
       render_could_not_create_error('Invalid current password') and return unless @user.valid_password?(password_params[:current_password])
 
