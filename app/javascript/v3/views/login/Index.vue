@@ -13,6 +13,7 @@ import globalConfigMixin from 'shared/mixins/globalConfigMixin';
 // components
 import FormInput from '../../components/Form/Input.vue';
 import GoogleOAuthButton from '../../components/GoogleOauth/Button.vue';
+import SSOButton from '../../components/SSO/Button.vue';
 import Spinner from 'shared/components/Spinner.vue';
 import SubmitButton from '../../components/Button/SubmitButton.vue';
 
@@ -25,6 +26,7 @@ export default {
   components: {
     FormInput,
     GoogleOAuthButton,
+    SSOButton,
     Spinner,
     SubmitButton,
   },
@@ -72,6 +74,9 @@ export default {
     ...mapGetters({ globalConfig: 'globalConfig/get' }),
     showGoogleOAuth() {
       return Boolean(window.chatwootConfig.googleOAuthClientId);
+    },
+    showSSOAuth() {
+      return Boolean(window.ssoConfig.ssoEnabled);
     },
     showSignupLink() {
       return parseBoolean(window.chatwootConfig.signupEnabled);
@@ -189,12 +194,13 @@ export default {
     <section
       class="bg-white shadow sm:mx-auto mt-11 sm:w-full sm:max-w-lg dark:bg-slate-800 p-11 sm:shadow-lg sm:rounded-lg"
       :class="{
-        'mb-8 mt-15': !showGoogleOAuth,
+        'mb-8 mt-15': !showGoogleOAuth && !showSSOAuth,
         'animate-wiggle': loginApi.hasErrored,
       }"
     >
       <div v-if="!email">
         <GoogleOAuthButton v-if="showGoogleOAuth" />
+        <SSOButton v-if="showSSOAuth" />
         <form class="space-y-5" @submit.prevent="submitFormLogin">
           <FormInput
             v-model="credentials.email"

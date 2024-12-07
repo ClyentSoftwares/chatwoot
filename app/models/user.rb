@@ -58,7 +58,7 @@ class User < ApplicationRecord
          :validatable,
          :confirmable,
          :password_has_required_content,
-         :omniauthable, omniauth_providers: [:google_oauth2]
+         :omniauthable, omniauth_providers: [:google_oauth2, :openid_connect]
 
   # TODO: remove in a future version once online status is moved to account users
   # remove the column availability from users
@@ -118,7 +118,8 @@ class User < ApplicationRecord
   end
 
   def set_password_and_uid
-    self.uid = email
+    # Do not set password/override uid if the user is created via SSO
+    self.uid = email if provider == 'email'
   end
 
   def assigned_inboxes

@@ -121,11 +121,13 @@ GEM
       jbuilder (~> 2)
       rails (>= 4.2, < 7.2)
       selectize-rails (~> 0.6)
+    aes_key_wrap (1.1.0)
     annotate (3.2.0)
       activerecord (>= 3.2, < 8.0)
       rake (>= 10.4, < 14.0)
     ast (2.4.2)
     attr_extras (7.1.0)
+    attr_required (1.0.2)
     audited (5.4.1)
       activerecord (>= 5.0, < 7.7)
       activesupport (>= 5.0, < 7.7)
@@ -151,6 +153,7 @@ GEM
     base64 (0.2.0)
     bcrypt (3.1.20)
     bigdecimal (3.1.8)
+    bindata (2.5.0)
     bindex (0.8.1)
     bootsnap (1.16.0)
       msgpack (~> 1.2)
@@ -228,6 +231,8 @@ GEM
       http (>= 3.0)
       ruby2_keywords
     email_reply_trimmer (0.1.13)
+    email_validator (2.2.4)
+      activemodel
     erubi (1.13.0)
     et-orbi (1.2.11)
       tzinfo
@@ -390,6 +395,13 @@ GEM
       railties (>= 4.2.0)
       thor (>= 0.14, < 2.0)
     json (2.6.3)
+    json-jwt (1.16.7)
+      activesupport (>= 4.2)
+      aes_key_wrap
+      base64
+      bindata
+      faraday (~> 2.0)
+      faraday-follow_redirects
     json_refs (0.1.8)
       hana
     json_schemer (0.2.24)
@@ -539,6 +551,22 @@ GEM
     omniauth-rails_csrf_protection (1.0.2)
       actionpack (>= 4.2)
       omniauth (~> 2.0)
+    omniauth_openid_connect (0.8.0)
+      omniauth (>= 1.9, < 3)
+      openid_connect (~> 2.2)
+    openid_connect (2.3.1)
+      activemodel
+      attr_required (>= 1.0.0)
+      email_validator
+      faraday (~> 2.0)
+      faraday-follow_redirects
+      json-jwt (>= 1.16)
+      mail
+      rack-oauth2 (~> 2.2)
+      swd (~> 2.0)
+      tzinfo
+      validate_url
+      webfinger (~> 2.0)
     openssl (3.2.0)
     orm_adapter (0.5.0)
     os (1.1.4)
@@ -573,6 +601,13 @@ GEM
       rack (>= 2.0.0)
     rack-mini-profiler (3.2.0)
       rack (>= 1.2.0)
+    rack-oauth2 (2.2.1)
+      activesupport
+      attr_required
+      faraday (~> 2.0)
+      faraday-follow_redirects
+      json-jwt (>= 1.11.0)
+      rack (>= 2.1.0)
     rack-protection (3.2.0)
       base64 (>= 0.1.0)
       rack (~> 2.2, >= 2.2.4)
@@ -770,6 +805,11 @@ GEM
     stackprof (0.2.25)
     statsd-ruby (1.5.0)
     stripe (8.5.0)
+    swd (2.0.3)
+      activesupport (>= 3)
+      attr_required (>= 0.0.5)
+      faraday (~> 2.0)
+      faraday-follow_redirects
     telephone_number (1.4.20)
     test-prof (1.2.1)
     thor (1.3.1)
@@ -802,6 +842,9 @@ GEM
     valid_email2 (5.2.6)
       activemodel (>= 3.2)
       mail (~> 2.5)
+    validate_url (1.0.15)
+      activemodel (>= 3.0.0)
+      public_suffix
     version_gem (1.1.4)
     vite_rails (3.0.17)
       railties (>= 5.1, < 8)
@@ -820,6 +863,10 @@ GEM
     web-push (3.0.1)
       jwt (~> 2.0)
       openssl (~> 3.0)
+    webfinger (2.1.3)
+      activesupport
+      faraday (~> 2.0)
+      faraday-follow_redirects
     webmock (3.23.1)
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
@@ -918,6 +965,7 @@ DEPENDENCIES
   omniauth-google-oauth2 (>= 1.1.3)
   omniauth-oauth2
   omniauth-rails_csrf_protection (~> 1.0, >= 1.0.2)
+  omniauth_openid_connect (~> 0.8.0)
   pg
   pg_search
   pgvector
@@ -976,4 +1024,4 @@ RUBY VERSION
    ruby 3.3.3p89
 
 BUNDLED WITH
-   2.5.16
+   2.5.11

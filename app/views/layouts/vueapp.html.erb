@@ -50,6 +50,11 @@
         helpUrls: <%= feature_help_urls.to_json.html_safe %>,
         selectedLocale: '<%= I18n.locale %>'
       }
+      window.ssoConfig = {
+        ssoEnabled: '<%= ENV.fetch('OIDC_CLIENT_ID', nil).present? %>',
+        ssoName: '<%= ENV.fetch('OIDC_DISPLAY_NAME', nil) %>',
+        authenticityToken: '<%= form_authenticity_token %>'
+      }
       window.globalConfig = <%= raw @global_config.to_json %>
       window.browserConfig = {
         browser_name: '<%= browser.name %>',
