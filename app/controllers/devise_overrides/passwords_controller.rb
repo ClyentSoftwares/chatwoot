@@ -9,7 +9,7 @@ class DeviseOverrides::PasswordsController < Devise::PasswordsController
     if @user
       # If user is an SSO user, do not allow password reset
       if @user.provider == 'openid_connect'
-        return build_response(I18n.t('messages.sso_user_reset_password'), 404)
+        return build_response('Password is managed by your SSO provider', 403)
       end
 
       @user.send_reset_password_instructions
