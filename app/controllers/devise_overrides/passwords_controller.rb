@@ -7,6 +7,11 @@ class DeviseOverrides::PasswordsController < Devise::PasswordsController
   def create
     @user = User.from_email(params[:email])
     if @user
+      # If user is an SSO user, do not allow password reset
+      if @user.provider == 'openid_connect'
+        return build_response(I18n.t('messages.sso_user_reset_password'), 404)
+      end
+
       @user.send_reset_password_instructions
       build_response(I18n.t('messages.reset_password_success'), 200)
     else
