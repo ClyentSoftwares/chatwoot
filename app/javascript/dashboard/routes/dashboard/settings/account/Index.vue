@@ -6,6 +6,7 @@ import { useAlert } from 'dashboard/composables';
 import { useUISettings } from 'dashboard/composables/useUISettings';
 import { useConfig } from 'dashboard/composables/useConfig';
 import { useAccount } from 'dashboard/composables/useAccount';
+import { useAdmin } from 'dashboard/composables/useAdmin';
 import { FEATURE_FLAGS } from '../../../../featureFlags';
 import semver from 'semver';
 import { getLanguageDirection } from 'dashboard/components/widgets/conversation/advancedFilterItems/languages';
@@ -15,9 +16,10 @@ export default {
     const { updateUISettings } = useUISettings();
     const { enabledLanguages } = useConfig();
     const { accountId } = useAccount();
+    const { isAdmin } = useAdmin();
     const v$ = useVuelidate();
 
-    return { updateUISettings, v$, enabledLanguages, accountId };
+    return { updateUISettings, v$, enabledLanguages, accountId, isAdmin };
   },
   data() {
     return {
@@ -29,6 +31,7 @@ export default {
       features: {},
       autoResolveDuration: null,
       latestChatwootVersion: null,
+      hmacToken: null,
     };
   },
   validations: {
@@ -122,6 +125,10 @@ export default {
         this.features = features;
         this.autoResolveDuration = auto_resolve_duration;
         this.latestChatwootVersion = latestChatwootVersion;
+
+        if (this.isAdmin) {
+          this.hmacToken = await this.$store.dispatch('accounts/getHMACToken');
+        }
       } catch (error) {
         // Ignore error
       }
@@ -265,6 +272,26 @@ export default {
           <woot-code :script="getAccountId" />
         </div>
       </div>
+
+      <div
+        v-if="hmacToken"
+        class="flex flex-row p-4 border-slate-25 dark:border-slate-700 text-black-900 dark:text-slate-300"
+      >
+        <div
+          class="flex-grow-0 flex-shrink-0 flex-[25%] min-w-0 py-4 pr-6 pl-0"
+        >
+          <h4 class="text-lg font-medium text-black-900 dark:text-slate-200">
+            Webhook HMAC Token
+          </h4>
+          <p>
+            This token is used to verify webhook requests from Chatwoot
+          </p>
+        </div>
+        <div class="p-4 flex-grow-0 flex-shrink-0 flex-[50%]">
+          <woot-code :script="hmacToken" />
+        </div>
+      </div>
+
       <div class="p-4 text-sm text-center">
         <div>{{ `v${globalConfig.appVersion}` }}</div>
         <div v-if="hasAnUpdateAvailable && globalConfig.displayManifest">

@@ -71,8 +71,9 @@ class AgentBotListener < BaseListener
 
   def process_webhook_bot_event(agent_bot, payload)
     return if agent_bot.outgoing_url.blank?
-
-    AgentBots::WebhookJob.perform_later(agent_bot.outgoing_url, payload)
+    # Pass agent_bot.account if it exists, or get it from payload if possible
+    account = agent_bot.account || payload.dig(:account) || payload.dig(:conversation, :account)
+    AgentBots::WebhookJob.perform_later(agent_bot.outgoing_url, payload, account)
   end
 
   def process_csml_bot_event(event, agent_bot, message)

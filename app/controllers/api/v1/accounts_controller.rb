@@ -43,6 +43,10 @@ class Api::V1::AccountsController < Api::BaseController
     render json: { cache_keys: cache_keys_for_account }, status: :ok
   end
 
+  def hmac_token
+    render json: { hmac_token: @account.hmac_token }
+  end
+
   def update
     @account.assign_attributes(account_params.slice(:name, :locale, :domain, :support_email, :auto_resolve_duration))
     @account.custom_attributes.merge!(custom_attributes_params)

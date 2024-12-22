@@ -7,6 +7,10 @@ class AccountPolicy < ApplicationPolicy
     @account_user.administrator? || @account_user.agent?
   end
 
+  def hmac_token?
+    @account_user.administrator?
+  end
+
   def limits?
     @account_user.administrator?
   end

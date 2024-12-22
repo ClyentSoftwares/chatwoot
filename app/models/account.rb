@@ -7,6 +7,7 @@
 #  custom_attributes     :jsonb
 #  domain                :string(100)
 #  feature_flags         :bigint           default(0), not null
+#  hmac_token            :string           not null
 #  limits                :jsonb
 #  locale                :integer          default("en")
 #  name                  :string           not null
@@ -34,6 +35,7 @@ class Account < ApplicationRecord
 
   validates :auto_resolve_duration, numericality: { greater_than_or_equal_to: 1, less_than_or_equal_to: 999, allow_nil: true }
   validates :domain, length: { maximum: 100 }
+  validates :hmac_token, presence: true, uniqueness: true
 
   has_many :account_users, dependent: :destroy_async
   has_many :agent_bot_inboxes, dependent: :destroy_async
@@ -81,6 +83,7 @@ class Account < ApplicationRecord
   enum locale: LANGUAGES_CONFIG.map { |key, val| [val[:iso_639_1_code], key] }.to_h
   enum status: { active: 0, suspended: 1 }
 
+  before_validation :ensure_hmac_token, on: :create
   before_validation :validate_limit_keys
   after_create_commit :notify_creation
   after_destroy :remove_account_sequences
@@ -147,6 +150,10 @@ class Account < ApplicationRecord
   def remove_account_sequences
     ActiveRecord::Base.connection.exec_query("drop sequence IF EXISTS camp_dpid_seq_#{id}")
     ActiveRecord::Base.connection.exec_query("drop sequence IF EXISTS conv_dpid_seq_#{id}")
+  end
+
+  def ensure_hmac_token
+    self.hmac_token ||= SecureRandom.hex(32)
   end
 end
 

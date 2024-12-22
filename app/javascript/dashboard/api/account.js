@@ -16,6 +16,13 @@ class AccountAPI extends ApiClient {
     );
     return response.data.cache_keys;
   }
+
+  async getHMACToken() {
+    const response = await axios.get(
+      `/api/v1/accounts/${this.accountIdFromRoute}/hmac_token`
+    );
+    return response.data.hmac_token;
+  }
 }
 
 export default new AccountAPI();

@@ -5,7 +5,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
 
   provider :openid_connect, {
     name: :openid_connect,
-    scope: ENV.fetch('OIDC_SCOPES', nil).split,
+    scope: ENV.fetch('OIDC_SCOPES', 'openid email profile').split,
     response_type: :code,
     uid_field: ENV.fetch('OIDC_UID_FIELD', 'sub'),
     discovery: true,

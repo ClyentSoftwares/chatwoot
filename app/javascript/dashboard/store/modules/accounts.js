@@ -121,6 +121,10 @@ export const actions = {
   getCacheKeys: async () => {
     return AccountAPI.getCacheKeys();
   },
+
+  getHMACToken: async () => {
+    return AccountAPI.getHMACToken();
+  },
 };
 
 export const mutations = {
