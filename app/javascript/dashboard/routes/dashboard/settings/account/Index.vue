@@ -10,8 +10,14 @@ import { useAdmin } from 'dashboard/composables/useAdmin';
 import { FEATURE_FLAGS } from '../../../../featureFlags';
 import semver from 'semver';
 import { getLanguageDirection } from 'dashboard/components/widgets/conversation/advancedFilterItems/languages';
+import { copyTextToClipboard } from 'shared/helpers/clipboard';
+
+import AccessToken from '../components/AccessToken.vue';
 
 export default {
+  components: {
+    AccessToken,
+  },
   setup() {
     const { updateUISettings } = useUISettings();
     const { enabledLanguages } = useConfig();
@@ -163,6 +169,11 @@ export default {
         rtl_view: isRTLSupported,
       });
     },
+
+    async onCopyToken(value) {
+      await copyTextToClipboard(value);
+      useAlert(this.$t('COMPONENTS.CODE.COPY_SUCCESSFUL'));
+    },
   },
 };
 </script>
@@ -288,7 +299,7 @@ export default {
           </p>
         </div>
         <div class="p-4 flex-grow-0 flex-shrink-0 flex-[50%]">
-          <woot-code :script="hmacToken" />
+          <AccessToken :value="hmacToken" @on-copy="onCopyToken" />
         </div>
       </div>
 

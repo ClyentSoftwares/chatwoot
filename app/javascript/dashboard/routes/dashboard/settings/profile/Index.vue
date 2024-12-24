@@ -14,7 +14,7 @@ import ChangePassword from './ChangePassword.vue';
 import NotificationPreferences from './NotificationPreferences.vue';
 import AudioNotifications from './AudioNotifications.vue';
 import FormSection from 'dashboard/components/FormSection.vue';
-import AccessToken from './AccessToken.vue';
+import AccessToken from '../components/AccessToken.vue';
 import Policy from 'dashboard/components/policy.vue';
 import {
   ROLES,
