@@ -56,7 +56,7 @@ class Api::V1::Accounts::Conversations::MessagesController < Api::V1::Accounts::
   end
 
   def permitted_params
-    params.permit(:id, :target_language)
+    params.permit(:id, :target_language, :before)
   end
 
   def already_translated_content_available?
